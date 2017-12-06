@@ -7,8 +7,8 @@ import be.nmine.moodtracker.R;
 
 public enum PagerItems {
 
-    DISAPPOINTED(1, R.layout.view_disappointed),
-    SAD(2, R.layout.view_sad),
+    SAD(1, R.layout.view_sad),
+    DISAPPOINTED(2, R.layout.view_disappointed),
     NORMAL(3, R.layout.view_normal),
     HAPPY(4, R.layout.view_happy),
     SUPER_HAPPY(5, R.layout.view_super_happy);
