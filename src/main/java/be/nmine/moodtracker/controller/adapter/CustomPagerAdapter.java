@@ -11,15 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import be.nmine.moodtracker.model.Comments;
-import be.nmine.moodtracker.model.PagerItems;
+import be.nmine.moodtracker.model.enumModel.Mood;
+import be.nmine.moodtracker.model.Moods;
+import be.nmine.moodtracker.util.Constants;
 
 import static android.content.Context.MODE_PRIVATE;
-import static be.nmine.moodtracker.model.PagerItems.values;
+import static be.nmine.moodtracker.model.enumModel.Mood.values;
+import static be.nmine.moodtracker.util.Constants.*;
 
 public class CustomPagerAdapter extends PagerAdapter {
 
-    public static final String MOOD_OF_THE_DAY = "MOOD_OF_THE_DAY";
+
     private Context mContext;
     private SharedPreferences mPrefreences;
 
@@ -31,19 +33,19 @@ public class CustomPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup viewPager, int position) {
-        PagerItems pagerItem = values()[position];
-        setNewCommentOfDayToPreference(pagerItem.name());
+        Mood mood = values()[position];
+        setNewMoodOfDayToPreference(mood);
         View viewMoodFromXml = LayoutInflater
                 .from(mContext)
-                .inflate(pagerItem.getLayoutId(), null);
+                .inflate(mood.getLayoutId(), null);
         viewPager.addView(viewMoodFromXml);
         return viewMoodFromXml;
     }
 
 
-    private void setNewCommentOfDayToPreference(String comment) {
-        mPrefreences.edit().putString(MOOD_OF_THE_DAY, new Comments()
-                .commentOfDay(comment)
+    private void setNewMoodOfDayToPreference(Mood mood) {
+        mPrefreences.edit().putString(MOOD_OF_THE_DAY, new Moods()
+                .moodOfDay(mood)
                 .json())
                 .apply();
     }
@@ -65,7 +67,7 @@ public class CustomPagerAdapter extends PagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        PagerItems customPagerEnum = values()[position];
+        Mood customPagerEnum = values()[position];
         return mContext.getString(customPagerEnum.getTitleId());
     }
 
