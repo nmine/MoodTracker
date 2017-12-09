@@ -15,10 +15,12 @@ import android.widget.ImageButton;
 import be.nmine.moodtracker.R;
 import be.nmine.moodtracker.controller.adapter.CustomPagerAdapter;
 import be.nmine.moodtracker.model.Comments;
+import be.nmine.moodtracker.util.Constants;
 
 import static android.text.TextUtils.isEmpty;
 import static android.view.View.OnClickListener;
 import static be.nmine.moodtracker.model.Comments.fromJson;
+import static be.nmine.moodtracker.util.Constants.COMMENT_OF_THE_DAY;
 
 /**
  * Created by Nicolas Mine on 29-11-17.
@@ -26,7 +28,7 @@ import static be.nmine.moodtracker.model.Comments.fromJson;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String COMMENT_OF_THE_DAY = "comment_of_the_day";
+
     private ImageButton mAddComment;
     private ImageButton mGotToHistory;
     private EditText mTextComment;
@@ -57,7 +59,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initGoToHistoryButton() {
-
+        mGotToHistory = findViewById(R.id.go_to_history);
+        mGotToHistory.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, HistoryActivity.class));
+            }
+        });
     }
 
     private void initAddNoteButton() {
@@ -67,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 displayAlertDialog();
             }
-
         });
     }
 
