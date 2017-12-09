@@ -1,18 +1,20 @@
 package be.nmine.moodtracker.model;
 
-import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+
+import static be.nmine.moodtracker.util.Constants.*;
 
 /**
  * Created by n1mbus on 03-12-17.
  */
 
 public class Comments {
-    public static final String DATE_PATTERN = "dd-MM-yyyyy";
+
+    @Expose
     private HashMap<String, String> mapCommentDay;
 
     public Comments() {
@@ -23,20 +25,25 @@ public class Comments {
         return mapCommentDay.get(date);
     }
 
+    public String getCommentOfDayBefore(int numberOfDayBefore) {
+        return mapCommentDay.get(
+                DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)));
+    }
+
     public Comments commentOfDay(String comment) {
-        SimpleDateFormat dateFormater = new SimpleDateFormat(DATE_PATTERN);
-        String format = dateFormater.format(Calendar.getInstance().getTime());
+        String format = DATE_FORMATER.format(Calendar.getInstance().getTime());
         mapCommentDay.put(format,comment);
         return this;
     }
 
 
     public String json() {
-        return new Gson().toJson(this);
+        return GSON.toJson(this);
     }
 
     public static Comments fromJson(String json) {
-        return new Gson().fromJson(json, Comments.class);
+        return GSON.fromJson(json, Comments.class);
     }
+
 
 }
