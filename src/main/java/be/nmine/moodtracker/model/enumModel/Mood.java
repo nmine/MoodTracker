@@ -1,11 +1,11 @@
-package be.nmine.moodtracker.model;
+package be.nmine.moodtracker.model.enumModel;
 import be.nmine.moodtracker.R;
 
 /**
  * Created by Nicolas Mine on 29-11-17.
  */
 
-public enum PagerItems {
+public enum Mood {
 
     SAD(1, R.layout.view_sad),
     DISAPPOINTED(2, R.layout.view_disappointed),
@@ -17,7 +17,7 @@ public enum PagerItems {
     private int mTitleId;
     private int mLayoutId;
 
-    PagerItems(int titleId, int layoutId) {
+    Mood(int titleId, int layoutId) {
         mTitleId = titleId;
         mLayoutId = layoutId;
     }
