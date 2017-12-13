@@ -2,4 +2,11 @@
     <string name="app_name">MoodTracker</string>
     <string name="main_dialog_submit">Valider</string>
     <string name="main_dialog_cancel">Annuler</string>
+    <string name="history_bar_minus7">Il y a 7 jours</string>
+    <string name="history_bar_minus6">Il y a 6 jours</string>
+    <string name="history_bar_minus5">Il y a 5 jours</string>
+    <string name="history_bar_minus4">Il y a 4 jours</string>
+    <string name="history_bar_minus3">Il y a 3 jours</string>
+    <string name="history_bar_minus2">Il y a 2 jours</string>
+    <string name="history_bar_minus1">Il y a 1 jours</string>
 </resources>

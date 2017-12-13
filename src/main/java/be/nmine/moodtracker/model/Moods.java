@@ -4,6 +4,8 @@ import com.google.gson.annotations.Expose;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import be.nmine.moodtracker.model.enumModel.Mood;
 
@@ -12,16 +14,16 @@ import static be.nmine.moodtracker.util.Constants.GSON;
 import static be.nmine.moodtracker.util.Constants.getSubtractDay;
 
 /**
- * Created by n1mbus on 03-12-17.
+ * Created by Nicolas Mine  on 03-12-17.
  */
 
 public class Moods {
 
     @Expose
-    private HashMap<String, String> moodOfDay;
+    private Map<String, String> moodOfDay;
 
     public Moods() {
-        moodOfDay = new HashMap<>();
+        moodOfDay = new TreeMap<>();
     }
 
     public String json() {
@@ -39,6 +41,14 @@ public class Moods {
                 DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)));
         return Mood.valueOf(mood != null ? mood : "HAPPY");
     }
+
+    //For testing
+    public Moods dummyMoodOfDayBefore(Mood mood, int numberOfDayBefore) {
+        moodOfDay.put(DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)),mood.name());
+        return this;
+    }
+
+
 
     public static Moods fromJson(String json) {
         return GSON.fromJson(json, Moods.class);

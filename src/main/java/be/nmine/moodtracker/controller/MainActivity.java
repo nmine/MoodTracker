@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,12 +16,14 @@ import android.widget.ImageButton;
 import be.nmine.moodtracker.R;
 import be.nmine.moodtracker.controller.adapter.CustomPagerAdapter;
 import be.nmine.moodtracker.model.Comments;
-import be.nmine.moodtracker.util.Constants;
+import be.nmine.moodtracker.model.Moods;
+import be.nmine.moodtracker.model.enumModel.Mood;
 
 import static android.text.TextUtils.isEmpty;
 import static android.view.View.OnClickListener;
 import static be.nmine.moodtracker.model.Comments.fromJson;
 import static be.nmine.moodtracker.util.Constants.COMMENT_OF_THE_DAY;
+import static be.nmine.moodtracker.util.Constants.MOOD_OF_THE_DAY;
 
 /**
  * Created by Nicolas Mine on 29-11-17.
@@ -42,10 +45,34 @@ public class MainActivity extends AppCompatActivity {
         initViewPager();
         initPrefereneces();
         initElement();
+        initDummyData();
+    }
+
+    private void initDummyData() {
+        mPrefreences.edit().putString(COMMENT_OF_THE_DAY, new Comments()
+                .dummytCommentOfDay("commentDay-1", 1)
+                .dummytCommentOfDay("commentDay-2", 2)
+                .dummytCommentOfDay("commentDay-3", 3)
+                .dummytCommentOfDay("commentDay-4", 4)
+                .dummytCommentOfDay("commentDay-5", 5)
+                .dummytCommentOfDay("commentDay-6", 6)
+                .dummytCommentOfDay("commentDay-7", 7)
+                .json())
+                .apply();
+        mPrefreences.edit().putString(MOOD_OF_THE_DAY, new Moods()
+                .dummyMoodOfDayBefore(Mood.NORMAL,1)
+                .dummyMoodOfDayBefore(Mood.HAPPY,2)
+                .dummyMoodOfDayBefore(Mood.DISAPPOINTED,3)
+                .dummyMoodOfDayBefore(Mood.SUPER_HAPPY,4)
+                .dummyMoodOfDayBefore(Mood.SAD,5)
+                .dummyMoodOfDayBefore(Mood.SUPER_HAPPY,6)
+                .dummyMoodOfDayBefore(Mood.NORMAL,7)
+                .json())
+                .apply();
     }
 
     private void initPrefereneces() {
-        mPrefreences = getPreferences(MODE_PRIVATE);
+        mPrefreences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     private void initViewPager() {
