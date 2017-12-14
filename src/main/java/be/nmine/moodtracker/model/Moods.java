@@ -36,6 +36,11 @@ public class Moods {
         return this;
     }
 
+    public String getTodayMood() {
+        return moodOfDay.get(
+                DATE_FORMATER.format(Calendar.getInstance().getTime()));
+    }
+
     public Mood getMoodOfDayBefore(int numberOfDayBefore) {
         String mood = moodOfDay.get(
                 DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)));
