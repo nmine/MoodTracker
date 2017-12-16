@@ -1,4 +1,4 @@
-package be.nmine.moodtracker.controller;
+package be.nmine.moodtracker.controller.history;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

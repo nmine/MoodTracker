@@ -19,13 +19,13 @@ import static android.content.Context.MODE_PRIVATE;
 import static be.nmine.moodtracker.model.enumModel.Mood.values;
 import static be.nmine.moodtracker.util.Constants.*;
 
-public class CustomPagerAdapter extends PagerAdapter {
+public class MoodPagerAdapter extends PagerAdapter {
 
 
     private Context mContext;
     private SharedPreferences mPrefreences;
 
-    public CustomPagerAdapter(Context context) {
+    public MoodPagerAdapter(Context context) {
         mContext = context;
         mPrefreences = ((Activity) mContext).getPreferences(MODE_PRIVATE);
     }

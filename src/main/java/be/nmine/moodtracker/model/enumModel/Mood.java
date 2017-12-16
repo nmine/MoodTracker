@@ -1,4 +1,5 @@
 package be.nmine.moodtracker.model.enumModel;
+
 import be.nmine.moodtracker.R;
 
 /**
@@ -28,6 +29,15 @@ public enum Mood {
 
     public int getLayoutId() {
         return mLayoutId;
+    }
+
+    public Mood valueOf(int titleId) {
+        for (Mood mood : Mood.values()) {
+            if (mood.getTitleId() == titleId) {
+                return mood;
+            }
+        }
+        throw new RuntimeException("No mood exist for this id");
     }
 
 }

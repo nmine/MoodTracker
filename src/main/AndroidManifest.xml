@@ -17,7 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.HistoryActivity" />
+        <activity android:name=".controller.history.HistoryActivity" />
+        <activity android:name=".controller.history.PieChartHistoryActivity" />
+        <receiver android:name=".service.AutoSaveMoodReceiver"></receiver>
         <meta-data
             tools:replace="android:value"
             android:name="android.support.VERSION"
