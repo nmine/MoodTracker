@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
@@ -12,19 +13,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/faded_red" />
-    <ImageButton
-        android:id="@+id/add_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_note_add_black" />
 
-    <ImageButton
-        android:id="@+id/go_to_history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_history_black" />
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/float_button_naviguation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_labels_ellipsize="end"
+        fab:menu_labels_position="left"
+        fab:menu_labels_singleLine="true">
+
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/float_button_item_go_to_history_pie_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chart_pie"
+            fab:fab_label="History Pie"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/float_button_item_go_to_history_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_history"
+            fab:fab_label="History Bar"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/float_button_item_add_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_file_plus"
+            fab:fab_label="Add note"
+            fab:fab_size="mini" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 </RelativeLayout>

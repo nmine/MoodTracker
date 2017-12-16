@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".controller.HistoryActivity">
+    tools:context=".controller.history.HistoryActivity">
 
 
     <RelativeLayout
@@ -30,7 +30,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="15dp"
-            android:src="@drawable/ic_comment_black_48px"
+            android:src="@drawable/ic_message_bulleted"
             android:visibility="invisible" />
     </RelativeLayout>
 
@@ -57,7 +57,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="15dp"
-            android:src="@drawable/ic_comment_black_48px"
+            android:src="@drawable/ic_message_bulleted"
             android:visibility="invisible" />
 
     </RelativeLayout>
@@ -86,7 +86,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="15dp"
-            android:src="@drawable/ic_comment_black_48px"
+            android:src="@drawable/ic_message_bulleted"
             android:visibility="invisible" />
 
     </RelativeLayout>
@@ -114,7 +114,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="15dp"
-            android:src="@drawable/ic_comment_black_48px"
+            android:src="@drawable/ic_message_bulleted"
             android:visibility="invisible" />
     </RelativeLayout>
 
@@ -141,7 +141,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="15dp"
-            android:src="@drawable/ic_comment_black_48px"
+            android:src="@drawable/ic_message_bulleted"
             android:visibility="invisible" />
 
     </RelativeLayout>
@@ -169,7 +169,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="15dp"
-            android:src="@drawable/ic_comment_black_48px"
+            android:src="@drawable/ic_message_bulleted"
             android:visibility="invisible" />
 
     </RelativeLayout>
@@ -196,7 +196,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="15dp"
-            android:src="@drawable/ic_comment_black_48px"
+            android:src="@drawable/ic_message_bulleted"
             android:visibility="invisible" />
 
     </RelativeLayout>
