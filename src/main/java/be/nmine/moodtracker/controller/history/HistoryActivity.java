@@ -1,13 +1,12 @@
 package be.nmine.moodtracker.controller.history;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -16,9 +15,9 @@ import be.nmine.moodtracker.R;
 import be.nmine.moodtracker.model.Comments;
 import be.nmine.moodtracker.model.Moods;
 import be.nmine.moodtracker.model.enumModel.Mood;
+import be.nmine.moodtracker.repository.Repository;
+import be.nmine.moodtracker.repository.RepositoryImpl;
 
-import static be.nmine.moodtracker.util.Constants.COMMENT_OF_THE_DAY;
-import static be.nmine.moodtracker.util.Constants.MOOD_OF_THE_DAY;
 import static java.util.Arrays.asList;
 
 /**
@@ -35,20 +34,29 @@ public class HistoryActivity extends AppCompatActivity {
     private RelativeLayout mMoodBar6;
     private RelativeLayout mMoodBar7;
 
-    private SharedPreferences mPrefreences;
+
+    private TextView mTextView1;
+    private TextView mTextView2;
+    private TextView mTextView3;
+    private TextView mTextView4;
+    private TextView mTextView5;
+    private TextView mTextView6;
+    private TextView mTextView7;
+
     private DisplayMetrics mDisplayMetrics;
-    private Comments mComments;
+    private Repository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        mPrefreences = PreferenceManager.getDefaultSharedPreferences(this);
+        mRepository = (Repository) getApplicationContext();
         initMoodBars();
     }
 
     private void initMoodBars() {
         initBars();
+        initTextView();
         drawBarForMood();
         addCommentToBar();
     }
@@ -58,28 +66,32 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void setMarginsAndColor() {
-        Moods moods = Moods.fromJson(mPrefreences.getString(MOOD_OF_THE_DAY, ""));
         int dayBefore = 1;
         for (RelativeLayout moodBar : moodBars()) {
-            setMarginsBar(moods, dayBefore, moodBar);
-            setColorBar(moods, dayBefore, moodBar);
+            if(!(mRepository.getMoodOfDayBefore(dayBefore) == null)) {
+                setMarginsBar(dayBefore, moodBar);
+                setColorBar(dayBefore, moodBar);
+                textViews().get(dayBefore-1).setVisibility(View.VISIBLE);
+            }
             dayBefore++;
             moodBar.refreshDrawableState();
         }
     }
 
-    private void setColorBar(Moods moods, int dayBefore, RelativeLayout moodBar) {
-        moodBar.setBackgroundResource(getMarginsForMoodOfTheDay(moods, dayBefore).color);
+    private void setColorBar(int dayBefore, RelativeLayout moodBar) {
+        moodBar.setBackgroundResource(getMarginsForMoodOfTheDay(dayBefore).color);
     }
 
-    private void setMarginsBar(Moods moods, int dayBefore, RelativeLayout moodBar) {
+    private void setMarginsBar( int dayBefore, RelativeLayout moodBar) {
         //Use of Linearlayout to avoid  java.lang.ClassCastException: android.widget.LinearLayout$LayoutParams cannot be cast to android.widget.RelativeLayout$LayoutParams
         //See https://stackoverflow.com/questions/18655940/linearlayoutlayoutparams-cannot-be-cast-to-android-widget-framelayoutlayoutpar
-        moodBar.getLayoutParams().width = getMarginsForMoodOfTheDay(moods, dayBefore).margins;
+        moodBar.getLayoutParams().width = getMarginsForMoodOfTheDay(dayBefore).margins;
     }
 
-    private Tuple getMarginsForMoodOfTheDay(Moods moods, int dayBefore) {
-        Mood mood = moods.getMoodOfDayBefore(dayBefore);
+    private Tuple getMarginsForMoodOfTheDay(int dayBefore) {
+        Mood mood = mRepository.getMoodOfDayBefore(dayBefore);
+        if(mood == null)
+            return new Tuple(0, R.color.warm_grey);
         return getMoodBarMargin(mood);
     }
 
@@ -134,12 +146,12 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     private void addCommentToBar() {
-        mComments = Comments.fromJson(mPrefreences.getString(COMMENT_OF_THE_DAY, ""));
-        Comments comments = Comments.fromJson(mPrefreences.getString(COMMENT_OF_THE_DAY, ""));
+        Comments comments = mRepository.getComments();
         int dayBefore = 1;
         for (RelativeLayout moodBar : moodBars()) {
-            if (comments.getCommentOfDayBefore(dayBefore) != null) {
-                addNoteToBar(comments.getCommentOfDayBefore(dayBefore), dayBefore);
+            String commentOfDayBefore = mRepository.getCommentOfDayBefore(dayBefore);
+            if (comments != null && commentOfDayBefore != null) {
+                addNoteToBar(commentOfDayBefore, dayBefore);
                 dayBefore++;
             }
         }
@@ -166,6 +178,10 @@ public class HistoryActivity extends AppCompatActivity {
         return asList(mMoodBar1, mMoodBar2, mMoodBar3, mMoodBar4, mMoodBar5, mMoodBar6, mMoodBar7);
     }
 
+    private List<TextView> textViews() {
+        return asList(mTextView1, mTextView2 , mTextView3, mTextView4, mTextView5, mTextView6, mTextView7);
+    }
+
     private List<View> commentTextViews() {
         return asList(findViewById(R.id.day_minus_1_image),
                 findViewById(R.id.day_minus_2_image),
@@ -185,6 +201,16 @@ public class HistoryActivity extends AppCompatActivity {
         mMoodBar5 = findViewById(R.id.seek_bar_day_5);
         mMoodBar6 = findViewById(R.id.seek_bar_day_6);
         mMoodBar7 = findViewById(R.id.seek_bar_day_7);
+    }
+
+    private void initTextView() {
+        mTextView1 = findViewById(R.id.day_minus_1_text);
+        mTextView2 = findViewById(R.id.day_minus_2_text);
+        mTextView3 = findViewById(R.id.day_minus_3_text);
+        mTextView4 = findViewById(R.id.day_minus_4_text);
+        mTextView5 = findViewById(R.id.day_minus_5_text);
+        mTextView6 = findViewById(R.id.day_minus_6_text);
+        mTextView7 = findViewById(R.id.day_minus_7_text);
     }
 
 
