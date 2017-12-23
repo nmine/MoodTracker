@@ -2,8 +2,11 @@ package be.nmine.moodtracker.model;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -30,32 +33,21 @@ public class Moods {
         return GSON.toJson(this);
     }
 
-    public Moods moodOfDay(Mood mood) {
-        String format = DATE_FORMATER.format(Calendar.getInstance().getTime());
-        moodOfDay.put(format,mood.name());
-        return this;
+    public Map<String, String> getMoodOfDay() {
+        return moodOfDay;
     }
 
-    public String getTodayMood() {
-        return moodOfDay.get(
-                DATE_FORMATER.format(Calendar.getInstance().getTime()));
-    }
-
-    public Mood getMoodOfDayBefore(int numberOfDayBefore) {
-        String mood = moodOfDay.get(
-                DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)));
-        return Mood.valueOf(mood != null ? mood : "HAPPY");
-    }
-
-    //For testing
-    public Moods dummyMoodOfDayBefore(Mood mood, int numberOfDayBefore) {
-        moodOfDay.put(DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)),mood.name());
-        return this;
-    }
+//    //For testing
+//    public Moods dummyMoodOfDayBefore(Mood mood, int numberOfDayBefore) {
+//        moodOfDay.put(DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)),mood.name());
+//        return this;
+//    }
 
 
 
     public static Moods fromJson(String json) {
+        if(json == null || json.isEmpty())
+            return new Moods();
         return GSON.fromJson(json, Moods.class);
     }
 

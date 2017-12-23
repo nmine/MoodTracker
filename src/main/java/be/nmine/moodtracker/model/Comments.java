@@ -23,32 +23,16 @@ public class Comments {
         mapCommentDay = new TreeMap<>();
     }
 
-    public String getComment(Date date) {
-        return mapCommentDay.get(date);
+    public Map<String, String> getMapCommentDay() {
+        return mapCommentDay;
     }
 
-    public String getCommentOfDayBefore(int numberOfDayBefore) {
-        return mapCommentDay.get(
-                DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)));
-    }
-
-    public String getTodayComment() {
-        return mapCommentDay.get(
-                DATE_FORMATER.format(Calendar.getInstance().getTime()));
-    }
-
-    public Comments commentOfDay(String comment) {
-        String format = DATE_FORMATER.format(Calendar.getInstance().getTime());
-        mapCommentDay.put(format,comment);
-        return this;
-    }
-
-    //For testing
-    public Comments dummytCommentOfDay(String comment, int dayBefore) {
-        String format = DATE_FORMATER.format(getSubtractDay(-dayBefore));
-        mapCommentDay.put(format,comment);
-        return this;
-    }
+//    //For testing
+//    public Comments dummytCommentOfDay(String comment, int dayBefore) {
+//        String format = DATE_FORMATER.format(getSubtractDay(-dayBefore));
+//        mapCommentDay.put(format,comment);
+//        return this;
+//    }
 
 
     public String json() {
