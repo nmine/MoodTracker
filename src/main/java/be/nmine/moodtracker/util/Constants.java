@@ -13,10 +13,6 @@ import java.util.Date;
 
 public class Constants {
 
-    public static final String COMMENT_OF_THE_DAY = "COMMENT_OF_THE_DAY";
-
-    public static final String MOOD_OF_THE_DAY = "MOOD_OF_THE_DAY";
-
     public static final String DATE_PATTERN = "dd-MM-yyyyy";
 
     public static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat(DATE_PATTERN);

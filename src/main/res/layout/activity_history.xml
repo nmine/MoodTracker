@@ -16,6 +16,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/day_minus_7_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/day_minus_6_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,6 +73,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/day_minus_5_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -100,6 +103,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/day_minus_4_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,6 +131,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/day_minus_3_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -155,6 +160,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/day_minus_2_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -182,6 +188,7 @@
         android:elevation="10dp">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/day_minus_1_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

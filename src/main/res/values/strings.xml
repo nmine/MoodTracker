@@ -2,11 +2,18 @@
     <string name="app_name">MoodTracker</string>
     <string name="main_dialog_submit">Valider</string>
     <string name="main_dialog_cancel">Annuler</string>
-    <string name="history_bar_minus7">Il y a 7 jours</string>
+    <string name="main_dialog_hint_comment">Commentaire</string>
+    <string name="history_bar_minus7">Il y a une semaine</string>
     <string name="history_bar_minus6">Il y a 6 jours</string>
     <string name="history_bar_minus5">Il y a 5 jours</string>
     <string name="history_bar_minus4">Il y a 4 jours</string>
     <string name="history_bar_minus3">Il y a 3 jours</string>
     <string name="history_bar_minus2">Il y a 2 jours</string>
-    <string name="history_bar_minus1">Il y a 1 jours</string>
+    <string name="history_bar_minus1">Hier</string>
+    <string name="history_pie_no_data_yet">Pas de données</string>
+    <string name="history_pie_mood_sad">Sad</string>
+    <string name="history_pie_mood_disappointed">Disappointed</string>
+    <string name="history_pie_mood_normal">Normal</string>
+    <string name="history_pie_mood_happy">Happy</string>
+    <string name="history_pie_mood_supper_happy">Supper happy</string>
 </resources>
