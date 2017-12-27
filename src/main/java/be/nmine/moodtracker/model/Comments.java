@@ -27,12 +27,10 @@ public class Comments {
         return mapCommentDay;
     }
 
-//    //For testing
-//    public Comments dummytCommentOfDay(String comment, int dayBefore) {
-//        String format = DATE_FORMATER.format(getSubtractDay(-dayBefore));
-//        mapCommentDay.put(format,comment);
-//        return this;
-//    }
+    public Comments putToMap(String date, String comment) {
+        mapCommentDay.put(date,comment);
+        return this;
+    }
 
 
     public String json() {
