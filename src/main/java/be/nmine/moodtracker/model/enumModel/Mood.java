@@ -14,19 +14,18 @@ public enum Mood {
     HAPPY(3, R.layout.view_happy,R.color.light_sage),
     SUPER_HAPPY(4, R.layout.view_super_happy,R.color.banana_yellow);
 
-
-    private int mTitleId;
+    private int mId;
     private int mLayoutId;
     private int mColorId;
 
-    Mood(int titleId, int layoutId, int colorId) {
-        mTitleId = titleId;
+    Mood(int id, int layoutId, int colorId) {
+        mId = id;
         mLayoutId = layoutId;
         mColorId = colorId;
     }
 
-    public int getTitleId() {
-        return mTitleId;
+    public int getId() {
+        return mId;
     }
 
     public int getLayoutId() {
@@ -37,9 +36,9 @@ public enum Mood {
         return mColorId;
     }
 
-    public Mood valueOf(int titleId) {
+    public Mood valueOf(int id) {
         for (Mood mood : Mood.values()) {
-            if (mood.getTitleId() == titleId) {
+            if (mood.getId() == id) {
                 return mood;
             }
         }
