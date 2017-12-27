@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import be.nmine.moodtracker.model.enumModel.Mood;
 import be.nmine.moodtracker.repository.Repository;
-import be.nmine.moodtracker.repository.RepositoryImpl;
 
 import static be.nmine.moodtracker.model.enumModel.Mood.values;
 
@@ -30,17 +29,11 @@ public class MoodPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup viewPager, int position) {
         Mood mood = values()[position];
-        setNewMoodOfDayToPreference(mood);
         View viewMoodFromXml = LayoutInflater
                 .from(mContext)
                 .inflate(mood.getLayoutId(), null);
         viewPager.addView(viewMoodFromXml);
         return viewMoodFromXml;
-    }
-
-
-    private void setNewMoodOfDayToPreference(Mood mood) {
-        mRepository.saveDailyMoodTemp(mood);
     }
 
     @Override
@@ -61,7 +54,7 @@ public class MoodPagerAdapter extends PagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         Mood customPagerEnum = values()[position];
-        return mContext.getString(customPagerEnum.getTitleId());
+        return mContext.getString(customPagerEnum.getId());
     }
 
     @Override
