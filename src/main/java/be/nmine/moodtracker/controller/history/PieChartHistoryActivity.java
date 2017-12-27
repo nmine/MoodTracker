@@ -18,7 +18,6 @@ import java.util.List;
 import be.nmine.moodtracker.R;
 import be.nmine.moodtracker.model.enumModel.Mood;
 import be.nmine.moodtracker.repository.Repository;
-import be.nmine.moodtracker.repository.RepositoryImpl;
 
 /**
  * Created by Nicolas Mine on 14-12-17.
@@ -109,7 +108,8 @@ public class PieChartHistoryActivity extends AppCompatActivity {
 
     private void setDescription() {
         Description description = new Description();
-        description.setText("Total since : " + mMoodWeeks.size() + " day");
+        String message =  getString(R.string.history_overview_day, 7, "s");
+        description.setText(message);
         description.setTextSize(20);
         mPieChart.setDescription(description);
     }
@@ -124,5 +124,6 @@ public class PieChartHistoryActivity extends AppCompatActivity {
         }
         mMoodsCountTemp.add(mood);
         return moodsCountList.size();
+
     }
 }
