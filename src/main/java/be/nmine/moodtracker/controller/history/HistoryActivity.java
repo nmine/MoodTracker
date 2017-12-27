@@ -1,8 +1,12 @@
 package be.nmine.moodtracker.controller.history;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -12,12 +16,12 @@ import android.widget.Toast;
 import java.util.List;
 
 import be.nmine.moodtracker.R;
-import be.nmine.moodtracker.model.Comments;
-import be.nmine.moodtracker.model.Moods;
+import be.nmine.moodtracker.controller.MainActivity;
 import be.nmine.moodtracker.model.enumModel.Mood;
 import be.nmine.moodtracker.repository.Repository;
-import be.nmine.moodtracker.repository.RepositoryImpl;
 
+import static android.content.DialogInterface.*;
+import static android.text.TextUtils.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -55,34 +59,47 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void initMoodBars() {
-        initBars();
+        initMoodDayBars();
         initTextView();
-        drawBarForMood();
+        drawMoodBar();
         addCommentToBar();
     }
 
-    private void drawBarForMood() {
-        setMarginsAndColor();
-    }
-
-    private void setMarginsAndColor() {
+    private void drawMoodBar() {
+        boolean noData = true;
         int dayBefore = 1;
         for (RelativeLayout moodBar : moodBars()) {
-            if(!(mRepository.getMoodOfDayBefore(dayBefore) == null)) {
-                setMarginsBar(dayBefore, moodBar);
-                setColorBar(dayBefore, moodBar);
-                textViews().get(dayBefore-1).setVisibility(View.VISIBLE);
+            if (moodExistForThisDay(dayBefore)) {
+                initBarForThisDay(dayBefore, moodBar);
+                noData = false;
             }
             dayBefore++;
             moodBar.refreshDrawableState();
         }
+        if (noData) {
+            displayAlertDialogAndSendToMainPage();
+        }
+    }
+
+    private void initBarForThisDay(int dayBefore, RelativeLayout moodBar) {
+        setMarginsBar(dayBefore, moodBar);
+        setColorBar(dayBefore, moodBar);
+        setBarTextVisible(dayBefore);
+    }
+
+    private void setBarTextVisible(int dayBefore) {
+        textViews().get(dayBefore - 1).setVisibility(View.VISIBLE);
+    }
+
+    private boolean moodExistForThisDay(int dayBefore) {
+        return !(mRepository.getMoodOfDayBefore(dayBefore) == null);
     }
 
     private void setColorBar(int dayBefore, RelativeLayout moodBar) {
         moodBar.setBackgroundResource(getMarginsForMoodOfTheDay(dayBefore).color);
     }
 
-    private void setMarginsBar( int dayBefore, RelativeLayout moodBar) {
+    private void setMarginsBar(int dayBefore, RelativeLayout moodBar) {
         //Use of Linearlayout to avoid  java.lang.ClassCastException: android.widget.LinearLayout$LayoutParams cannot be cast to android.widget.RelativeLayout$LayoutParams
         //See https://stackoverflow.com/questions/18655940/linearlayoutlayoutparams-cannot-be-cast-to-android-widget-framelayoutlayoutpar
         moodBar.getLayoutParams().width = getMarginsForMoodOfTheDay(dayBefore).margins;
@@ -90,7 +107,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private Tuple getMarginsForMoodOfTheDay(int dayBefore) {
         Mood mood = mRepository.getMoodOfDayBefore(dayBefore);
-        if(mood == null)
+        if (mood == null)
             return new Tuple(0, R.color.warm_grey);
         return getMoodBarMargin(mood);
     }
@@ -100,18 +117,29 @@ public class HistoryActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
         switch (mood) {
             case SAD:
-                return new Tuple(marginsForSad(), R.color.faded_red);
+                return new Tuple(marginsForSad(), mood.getColorId());
             case DISAPPOINTED:
-                return new Tuple(marginsForDisappointed(), R.color.warm_grey);
+                return new Tuple(marginsForDisappointed(), mood.getColorId());
             case NORMAL:
-                return new Tuple(marginsForNormal(), R.color.cornflower_blue_65);
+                return new Tuple(marginsForNormal(), mood.getColorId());
             case HAPPY:
-                return new Tuple(marginsForHappy(), R.color.light_sage);
+                return new Tuple(marginsForHappy(), mood.getColorId());
             case SUPER_HAPPY:
-                return new Tuple(marginsForSuperHappy(), R.color.banana_yellow);
+                return new Tuple(marginsForSuperHappy(), mood.getColorId());
             default:
                 return null;
         }
+    }
+
+    private void displayAlertDialogAndSendToMainPage() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.history_pie_no_data_yet)
+                .setPositiveButton(R.string.main_dialog_submit, new OnClickListener() {
+                    public void onClick(DialogInterface d, int whichButton) {
+                        startActivity(new Intent(HistoryActivity.this, MainActivity.class));
+                    }
+                })
+                .show();
     }
 
     private int marginsForSad() {
@@ -146,26 +174,29 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     private void addCommentToBar() {
-        Comments comments = mRepository.getComments();
-        int dayBefore = 1;
-        for (RelativeLayout moodBar : moodBars()) {
-            String commentOfDayBefore = mRepository.getCommentOfDayBefore(dayBefore);
-            if (comments != null && commentOfDayBefore != null) {
-                addNoteToBar(commentOfDayBefore, dayBefore);
-                dayBefore++;
+        for (int dayBefore = 1; dayBefore <= 7; dayBefore++) {
+            String comment = mRepository.getCommentOfDayBefore(dayBefore);
+            if (!isEmpty(comment)) {
+                addNoteToBar(comment, dayBefore);
             }
         }
     }
 
     private void addNoteToBar(final String comment, int dayBefore) {
-        View view = commentTextViews().get(dayBefore-1);
-        view.setVisibility(View.VISIBLE);
+        View view = setCommentIconVisible(dayBefore);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 displayToast(comment);
             }
         });
+    }
+
+    @NonNull
+    private View setCommentIconVisible(int dayBefore) {
+        View view = commentTextViews().get(dayBefore - 1);
+        view.setVisibility(View.VISIBLE);
+        return view;
     }
 
     private void displayToast(String comment) {
@@ -179,7 +210,7 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private List<TextView> textViews() {
-        return asList(mTextView1, mTextView2 , mTextView3, mTextView4, mTextView5, mTextView6, mTextView7);
+        return asList(mTextView1, mTextView2, mTextView3, mTextView4, mTextView5, mTextView6, mTextView7);
     }
 
     private List<View> commentTextViews() {
@@ -193,7 +224,7 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
 
-    private void initBars() {
+    private void initMoodDayBars() {
         mMoodBar1 = findViewById(R.id.seek_bar_day_1);
         mMoodBar2 = findViewById(R.id.seek_bar_day_2);
         mMoodBar3 = findViewById(R.id.seek_bar_day_3);
