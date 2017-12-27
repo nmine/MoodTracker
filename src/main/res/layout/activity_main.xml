@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_chart_pie"
-            fab:fab_label="History Pie"
+            fab:fab_label="@string/fab_history_pie"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_history"
-            fab:fab_label="History Bar"
+            fab:fab_label="@string/fab_history_bar"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_file_plus"
-            fab:fab_label="Add note"
+            fab:fab_label="@string/fab_add_note"
             fab:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>

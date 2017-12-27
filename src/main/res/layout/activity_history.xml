@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".controller.history.HistoryActivity">
-
-
     <RelativeLayout
         android:id="@+id/seek_bar_day_7"
         android:layout_width="wrap_content"
