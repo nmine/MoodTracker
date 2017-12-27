@@ -13,11 +13,10 @@ import java.util.Date;
 
 public class Constants {
 
-    public static final String DATE_PATTERN = "dd-MM-yyyyy";
+    public static final String DATE_PATTERN = "dd-MM-yyyy";
 
     public static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat(DATE_PATTERN);
 
-    public static final int REQUEST_CODE = 1;
 
     public static final Gson GSON = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
