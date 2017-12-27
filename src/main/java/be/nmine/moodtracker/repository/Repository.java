@@ -2,8 +2,6 @@ package be.nmine.moodtracker.repository;
 
 import java.util.List;
 
-import be.nmine.moodtracker.model.Comments;
-import be.nmine.moodtracker.model.Moods;
 import be.nmine.moodtracker.model.enumModel.Mood;
 
 /**
@@ -12,28 +10,22 @@ import be.nmine.moodtracker.model.enumModel.Mood;
 
 public interface Repository {
 
-   String getDailyMoodTemp();
+    String getTodayMood();
 
-   void saveDailyMoodTemp(Mood mood);
+    List<Mood> getMoodOfLastSevenDayBefore();
 
-   void saveMood(Mood mood,int dayBefore);
+    void saveDailyMood(Mood mood);
 
-   Moods getMoods();
+    void saveMood(Mood mood, int dayBefore);
 
-   List<Mood> getMoodOfLastSevenDayBefore();
+    Mood getMoodOfDayBefore(int dayBefore);
 
-   Mood getMoodOfDayBefore(int numberOfDayBefore);
+    String getCommentOfDayBefore(int dayBefore);
 
-   void removeMoodOfTheDayTemp();
 
-   Comments getComments();
+    String getTodayComment();
 
-   String getDailyCommentTemp();
+    void saveTodayComment(String comment);
 
-   String getCommentOfDayBefore(int numberOfDayBefore);
-
-   void setCommentOfDayTemp(String comment);
-
-   void saveComment(String comment,int dayBefore);
-
-   void removeCommentdOfTheDayTemp();}
+    void saveComment(String comment, int dayBefore);
+}

@@ -3,8 +3,10 @@ package be.nmine.moodtracker.repository;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import be.nmine.moodtracker.model.Comments;
@@ -20,36 +22,43 @@ import static be.nmine.moodtracker.util.Constants.getSubtractDay;
 
 public class RepositoryImpl extends Application implements Repository {
 
-    public static final String GLOBAL_PREFRENCE = "GLOBAL_PREFRENCE";
-
-    public static final String PREF_KEY_COMMENT_OF_THE_DAY = "PREF_KEY_COMMENT_OF_THE_DAY";
+    public static final String GLOBAL_PREFRENCE = "GLOAL_PREFRENCE";
 
     public static final String PREF_KEY_COMMENTS = "PREF_KEY_COMMENTS";
 
     public static final String PREF_KEY_MOODS = "PREF_KEY_MOODS";
 
-    public static final String PREF_KEY_DAILY_MOOD = "PREF_KEY_DAILY_MOOD";
-    public static final String EMPTY_STRING = "";
-
     private static SharedPreferences mSharedPreferences;
 
 
     public static void init(Context context) {
-        if (mSharedPreferences == null)
-            mSharedPreferences = context.getSharedPreferences(GLOBAL_PREFRENCE, MODE_PRIVATE);
-        Moods moods = Moods.fromJson(mSharedPreferences.getString(PREF_KEY_MOODS, ""));
-        if (moods == null) {
-            mSharedPreferences.edit().putString(PREF_KEY_MOODS, new Moods()
-                    .json())
-                    .apply();
-        }
+        initSharePreferenceGlobable(context);
+        initSharedPreferenceMoods();
+        initSharedPreferenceComments();
+
+    }
+
+    private static void initSharedPreferenceComments() {
         Comments comments = Comments.fromJson(mSharedPreferences.getString(PREF_KEY_COMMENTS, ""));
         if (comments == null) {
             mSharedPreferences.edit().putString(PREF_KEY_COMMENTS, new Comments()
                     .json())
                     .apply();
         }
+    }
 
+    private static void initSharedPreferenceMoods() {
+        Moods moods = Moods.fromJson(mSharedPreferences.getString(PREF_KEY_MOODS, ""));
+        if (moods == null) {
+            mSharedPreferences.edit().putString(PREF_KEY_MOODS, new Moods()
+                    .json())
+                    .apply();
+        }
+    }
+
+    private static void initSharePreferenceGlobable(Context context) {
+        if (mSharedPreferences == null)
+            mSharedPreferences = context.getSharedPreferences(GLOBAL_PREFRENCE, MODE_PRIVATE);
     }
 
     @Override
@@ -59,14 +68,18 @@ public class RepositoryImpl extends Application implements Repository {
     }
 
     @Override
-    public String getDailyMoodTemp() {
-        String dailyMood = mSharedPreferences.getString(PREF_KEY_DAILY_MOOD, "");
-        return dailyMood;
+    public String getTodayMood() {
+        String date = todayAsString();
+        return getMoods().getMoodOfDay().get(date);
+    }
+
+    private String todayAsString() {
+        return DATE_FORMATER.format(new Date());
     }
 
     @Override
-    public void saveDailyMoodTemp(Mood mood) {
-        mSharedPreferences.edit().putString(PREF_KEY_DAILY_MOOD, mood.name()).apply();
+    public void saveDailyMood(Mood mood) {
+        saveMood(mood,0);
     }
 
     @Override
@@ -76,11 +89,9 @@ public class RepositoryImpl extends Application implements Repository {
         moods.getMoodOfDay().put(date, mood.name());
         mSharedPreferences.edit().putString(PREF_KEY_MOODS, moods.json())
                 .apply();
-
     }
 
-    @Override
-    public Moods getMoods() {
+    private Moods getMoods() {
         return Moods.fromJson(mSharedPreferences.getString(PREF_KEY_MOODS, ""));
     }
 
@@ -100,26 +111,14 @@ public class RepositoryImpl extends Application implements Repository {
     public Mood getMoodOfDayBefore(int numberOfDayBefore) {
         String mood = getMoods().getMoodOfDay().get(
                 DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)));
-        if (mood != null)
+        if (!TextUtils.isEmpty(mood))
             return Mood.valueOf(mood);
         else
             return null;
     }
 
-    @Override
-    public void removeMoodOfTheDayTemp() {
-        mSharedPreferences.edit().putString(PREF_KEY_DAILY_MOOD, EMPTY_STRING)
-                .apply();
-    }
-
-    @Override
-    public Comments getComments() {
+    private Comments getComments() {
         return Comments.fromJson(mSharedPreferences.getString(PREF_KEY_COMMENTS, ""));
-    }
-
-    @Override
-    public String getDailyCommentTemp() {
-        return mSharedPreferences.getString(PREF_KEY_COMMENT_OF_THE_DAY, "");
     }
 
     @Override
@@ -129,8 +128,15 @@ public class RepositoryImpl extends Application implements Repository {
     }
 
     @Override
-    public void setCommentOfDayTemp(String comment) {
-        mSharedPreferences.edit().putString(PREF_KEY_COMMENT_OF_THE_DAY, comment)
+    public String getTodayComment() {
+        String dayString = DATE_FORMATER.format(getSubtractDay(0));
+        return getComments().getMapCommentDay().get(dayString);
+    }
+
+    @Override
+    public void saveTodayComment(String comment) {
+        String json = getComments().putToMap(todayAsString(), comment).json();
+        mSharedPreferences.edit().putString(PREF_KEY_COMMENTS, json)
                 .apply();
     }
 
@@ -144,9 +150,4 @@ public class RepositoryImpl extends Application implements Repository {
 
     }
 
-    @Override
-    public void removeCommentdOfTheDayTemp() {
-        mSharedPreferences.edit().putString(PREF_KEY_COMMENT_OF_THE_DAY, EMPTY_STRING)
-                .apply();
-    }
 }
