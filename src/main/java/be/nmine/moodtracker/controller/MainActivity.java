@@ -1,22 +1,16 @@
 package be.nmine.moodtracker.controller;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 
 import com.github.clans.fab.FloatingActionButton;
-
-import java.util.Calendar;
 
 import be.nmine.moodtracker.R;
 import be.nmine.moodtracker.controller.adapter.MoodPagerAdapter;
@@ -25,11 +19,10 @@ import be.nmine.moodtracker.controller.history.PieChartHistoryActivity;
 import be.nmine.moodtracker.model.enumModel.Mood;
 import be.nmine.moodtracker.repository.Repository;
 import be.nmine.moodtracker.repository.RepositoryImpl;
-import be.nmine.moodtracker.service.AutoSaveMoodReceiver;
 
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.app.PendingIntent.getBroadcast;
+import static android.text.TextUtils.*;
 import static android.view.View.OnClickListener;
+import static be.nmine.moodtracker.model.enumModel.Mood.values;
 
 /**
  * Created by Nicolas Mine on 29-11-17.
@@ -43,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mGotToHistoryPieChart;
     private EditText mTextComment;
     private ViewPager mViewPager;
-    private boolean isAutoSaveHasBeenInit;
     private Repository mRepository;
 
     @Override
@@ -52,82 +44,83 @@ public class MainActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mRepository = (Repository) getApplicationContext();
         setContentView(R.layout.activity_main);
-        initElement();
+        initFloatButtons();
         initDummyData();
-        setPagerMoodOfTheDay();
-        if(!isAutoSaveHasBeenInit)
-            initAutoSaveEvent();
+        initPager();
     }
 
-    private void setPagerMoodOfTheDay() {
+    private void initPager() {
         mViewPager = findViewById(R.id.viewpager);
-        String dailyMood = mRepository.getDailyMoodTemp();
-        mViewPager.setAdapter(new MoodPagerAdapter(this, (RepositoryImpl)getApplicationContext()));
-        View moodView = LayoutInflater
-                .from(this)
-                .inflate(getIdTodayLayoutMood(dailyMood), null);
-        mViewPager.addView(moodView);
-        mViewPager.setCurrentItem(getIdPagerTodayMood(dailyMood));
+        String dailyMood = mRepository.getTodayMood();
+        mViewPager.setAdapter(new MoodPagerAdapter(this, (RepositoryImpl) getApplicationContext()));
+        saveHappyMoodIfNoMoodYetForToday(dailyMood);
+        mViewPager.setCurrentItem(getIdTodayMood(dailyMood));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mRepository.saveDailyMood(values()[position]);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
-    private int getIdTodayLayoutMood(String dailyMood) {
-        if(dailyMood != null && !dailyMood.isEmpty()) {
-            return Mood.valueOf(dailyMood).getLayoutId();
-        }else {
-            return Mood.HAPPY.getLayoutId();
-        }
+    private void saveHappyMoodIfNoMoodYetForToday(String dailyMood) {
+        if (isEmpty(dailyMood))
+            mRepository.saveDailyMood(Mood.HAPPY);
     }
 
-    private int getIdPagerTodayMood(String dailyMood) {
-        if(dailyMood != null && !dailyMood.isEmpty()) {
-            return Mood.valueOf(dailyMood).getTitleId();
-        }else {
-            return Mood.HAPPY.getTitleId();
+
+    private int getIdTodayMood(String dailyMood) {
+        if (!isEmpty(dailyMood)) {
+            return Mood.valueOf(dailyMood).getId();
+        } else {
+            return Mood.HAPPY.getId();
         }
     }
 
     private void initDummyData() {
-//        mPrefreences.edit().putString(PREF_KEY_COMMENT_OF_THE_DAY, new Comments()
-//                .dummytCommentOfDay("commentDay-1", 1)
-////                .dummytCommentOfDay("commentDay-2", 2)
-////                .dummytCommentOfDay("commentDay-3", 3)
-////                .dummytCommentOfDay("commentDay-4", 4)
-////                .dummytCommentOfDay("commentDay-5", 5)
-////                .dummytCommentOfDay("commentDay-6", 6)
-////                .dummytCommentOfDay("commentDay-7", 7)
-//                .json())
-//                .apply();
-//        mPrefreences.edit().putString(PREF_KEY_MOODS, new Moods()
-//                .dummyMoodOfDayBefore(Mood.NORMAL, 1)
-////                .dummyMoodOfDayBefore(Mood.HAPPY, 2)
-//                .dummyMoodOfDayBefore(Mood.DISAPPOINTED, 3)
-////                .dummyMoodOfDayBefore(Mood.SUPER_HAPPY, 4)
-//                .dummyMoodOfDayBefore(Mood.SAD, 5)
-////                .dummyMoodOfDayBefore(Mood.SUPER_HAPPY, 6)
-//                .dummyMoodOfDayBefore(Mood.NORMAL, 7)
-//                .json())
-//                .apply();
+//        mRepository.saveComment("Lorem ipsum dolor sit amet,", 1);
+//        mRepository.saveComment("Lorem ipsum dolor sit amet,", 3);
+//        mRepository.saveComment("Lorem ipsum dolor sit amet,", 6);
+//
+//        mRepository.saveMood(Mood.NORMAL, 1);
+//        mRepository.saveMood(Mood.SUPER_HAPPY, 2);
+//        mRepository.saveMood(Mood.DISAPPOINTED, 3);
+//        mRepository.saveMood(Mood.SAD, 5);
+//        mRepository.saveMood(Mood.SUPER_HAPPY, 6);
+//        mRepository.saveMood(Mood.NORMAL, 7);
     }
 
-    private void initElement() {
+    private void initFloatButtons() {
         initAddNoteButton();
-        initGoToHistoryButton();
+        initHistoryPieButtons();
+        initHistoryButtons();
     }
 
-    private void initGoToHistoryButton() {
-        mGotToHistoryPieChart = findViewById(R.id.float_button_item_go_to_history_pie_chart);
-        mGotToHistoryPieChart.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, PieChartHistoryActivity.class));
-            }
-        });
-
+    private void initHistoryButtons() {
         mGotToHistoryBar = findViewById(R.id.float_button_item_go_to_history_bar);
         mGotToHistoryBar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, HistoryActivity.class));
+            }
+        });
+    }
+
+    private void initHistoryPieButtons() {
+        mGotToHistoryPieChart = findViewById(R.id.float_button_item_go_to_history_pie_chart);
+        mGotToHistoryPieChart.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, PieChartHistoryActivity.class));
             }
         });
     }
@@ -143,14 +136,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayAlertDialog() {
-        mTextComment = new EditText(this);
-        mTextComment.setHint(R.string.main_dialog_hint_comment);
-        //TODO set exiting comment of the day to dialog edittext
+        initTextComment();
         new AlertDialog.Builder(this)
                 .setView(mTextComment)
                 .setPositiveButton(R.string.main_dialog_submit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        mRepository.setCommentOfDayTemp(mTextComment.getText().toString());
+                        mRepository.saveTodayComment(mTextComment.getText().toString());
                     }
                 })
 
@@ -162,14 +153,16 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void initAutoSaveEvent() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 0);
-        PendingIntent pendingIntent = getBroadcast(this, 0, new Intent(this, AutoSaveMoodReceiver.class), FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        isAutoSaveHasBeenInit = true;
+    private void initTextComment() {
+        mTextComment = new EditText(this);
+        setTodayCommentIfExist();
+        mTextComment.setHint(R.string.main_dialog_hint_comment);
     }
+
+    private void setTodayCommentIfExist() {
+        String todayComment = mRepository.getTodayComment();
+        if (!isEmpty(todayComment))
+            mTextComment.setText(todayComment);
+    }
+
 }
