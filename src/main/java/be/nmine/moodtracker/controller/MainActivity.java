@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         mRepository = (Repository) getApplicationContext();
         setContentView(R.layout.activity_main);
         initFloatButtons();
-        initDummyData();
         initPager();
     }
 
@@ -84,19 +83,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return Mood.HAPPY.getId();
         }
-    }
-
-    private void initDummyData() {
-//        mRepository.saveComment("Lorem ipsum dolor sit amet,", 1);
-//        mRepository.saveComment("Lorem ipsum dolor sit amet,", 3);
-//        mRepository.saveComment("Lorem ipsum dolor sit amet,", 6);
-//
-//        mRepository.saveMood(Mood.NORMAL, 1);
-//        mRepository.saveMood(Mood.SUPER_HAPPY, 2);
-//        mRepository.saveMood(Mood.DISAPPOINTED, 3);
-//        mRepository.saveMood(Mood.SAD, 5);
-//        mRepository.saveMood(Mood.SUPER_HAPPY, 6);
-//        mRepository.saveMood(Mood.NORMAL, 7);
     }
 
     private void initFloatButtons() {

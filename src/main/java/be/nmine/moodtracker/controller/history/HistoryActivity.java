@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -47,7 +46,6 @@ public class HistoryActivity extends AppCompatActivity {
     private TextView mTextView6;
     private TextView mTextView7;
 
-    private DisplayMetrics mDisplayMetrics;
     private Repository mRepository;
 
     @Override
@@ -66,24 +64,23 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void drawMoodBar() {
-        boolean noData = true;
+        boolean noDataForLastSevenDay = true;
         int dayBefore = 1;
         for (RelativeLayout moodBar : moodBars()) {
-            if (moodExistForThisDay(dayBefore)) {
-                initBarForThisDay(dayBefore, moodBar);
-                noData = false;
+            if (dayHasMoodSaved(dayBefore)) {
+                initBarForDay(dayBefore, moodBar);
+                noDataForLastSevenDay = false;
             }
             dayBefore++;
             moodBar.refreshDrawableState();
         }
-        if (noData) {
+        if (noDataForLastSevenDay) {
             displayAlertDialogAndSendToMainPage();
         }
     }
 
-    private void initBarForThisDay(int dayBefore, RelativeLayout moodBar) {
-        setMarginsBar(dayBefore, moodBar);
-        setColorBar(dayBefore, moodBar);
+    private void initBarForDay(int dayBefore, RelativeLayout moodBar) {
+        setWithAndColorBar(dayBefore, moodBar);
         setBarTextVisible(dayBefore);
     }
 
@@ -91,44 +88,46 @@ public class HistoryActivity extends AppCompatActivity {
         textViews().get(dayBefore - 1).setVisibility(View.VISIBLE);
     }
 
-    private boolean moodExistForThisDay(int dayBefore) {
+    private boolean dayHasMoodSaved(int dayBefore) {
         return !(mRepository.getMoodOfDayBefore(dayBefore) == null);
     }
 
-    private void setColorBar(int dayBefore, RelativeLayout moodBar) {
-        moodBar.setBackgroundResource(getMarginsForMoodOfTheDay(dayBefore).color);
-    }
-
-    private void setMarginsBar(int dayBefore, RelativeLayout moodBar) {
+    private void setWithAndColorBar(int dayBefore, RelativeLayout moodBar) {
+        Pair withAndColors = getWithAndColorForMoodBarOfTheDay(dayBefore);
+        moodBar.setBackgroundResource(withAndColors.color);
         //Use of Linearlayout to avoid  java.lang.ClassCastException: android.widget.LinearLayout$LayoutParams cannot be cast to android.widget.RelativeLayout$LayoutParams
         //See https://stackoverflow.com/questions/18655940/linearlayoutlayoutparams-cannot-be-cast-to-android-widget-framelayoutlayoutpar
-        moodBar.getLayoutParams().width = getMarginsForMoodOfTheDay(dayBefore).margins;
+        moodBar.getLayoutParams().width = withAndColors.margins;
     }
 
-    private Tuple getMarginsForMoodOfTheDay(int dayBefore) {
+    private Pair getWithAndColorForMoodBarOfTheDay(int dayBefore) {
         Mood mood = mRepository.getMoodOfDayBefore(dayBefore);
         if (mood == null)
-            return new Tuple(0, R.color.warm_grey);
-        return getMoodBarMargin(mood);
+            return new Pair(0, R.color.warm_grey);
+        return getMoodBarMarginAndColor(mood);
     }
 
-    private Tuple getMoodBarMargin(Mood mood) {
-        mDisplayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+    private Pair getMoodBarMarginAndColor(Mood mood) {
         switch (mood) {
             case SAD:
-                return new Tuple(marginsForSad(), mood.getColorId());
+                return new Pair(marginsForSad(), mood.getColorId());
             case DISAPPOINTED:
-                return new Tuple(marginsForDisappointed(), mood.getColorId());
+                return new Pair(marginsForDisappointed(), mood.getColorId());
             case NORMAL:
-                return new Tuple(marginsForNormal(), mood.getColorId());
+                return new Pair(marginsForNormal(), mood.getColorId());
             case HAPPY:
-                return new Tuple(marginsForHappy(), mood.getColorId());
+                return new Pair(marginsForHappy(), mood.getColorId());
             case SUPER_HAPPY:
-                return new Tuple(marginsForSuperHappy(), mood.getColorId());
+                return new Pair(marginsForSuperHappy(), mood.getColorId());
             default:
                 return null;
         }
+    }
+
+    private int getWithScreen() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
     }
 
     private void displayAlertDialogAndSendToMainPage() {
@@ -143,30 +142,30 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private int marginsForSad() {
-        return (int) (mDisplayMetrics.widthPixels * 0.25);
+        return (int) (getWithScreen() * 0.25);
     }
 
     private int marginsForDisappointed() {
-        return (int) (mDisplayMetrics.widthPixels * 0.35);
+        return (int) (getWithScreen() * 0.35);
     }
 
     private int marginsForNormal() {
-        return (int) (mDisplayMetrics.widthPixels * 0.5);
+        return (int) (getWithScreen() * 0.5);
     }
 
     private int marginsForHappy() {
-        return (int) (mDisplayMetrics.widthPixels * 0.85);
+        return (int) (getWithScreen() * 0.85);
     }
 
     private int marginsForSuperHappy() {
-        return mDisplayMetrics.widthPixels;
+        return getWithScreen();
     }
 
-    class Tuple {
+    class Pair {
         private int margins;
         private int color;
 
-        public Tuple(int margins, int color) {
+        Pair(int margins, int color) {
             this.margins = margins;
             this.color = color;
         }
