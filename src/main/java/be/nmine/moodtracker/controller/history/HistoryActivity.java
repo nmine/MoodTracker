@@ -18,33 +18,49 @@ import be.nmine.moodtracker.R;
 import be.nmine.moodtracker.controller.MainActivity;
 import be.nmine.moodtracker.model.enumModel.Mood;
 import be.nmine.moodtracker.repository.Repository;
+import butterknife.BindView;
 
-import static android.content.DialogInterface.*;
-import static android.text.TextUtils.*;
+import static android.content.DialogInterface.OnClickListener;
+import static android.text.TextUtils.isEmpty;
+import static butterknife.ButterKnife.bind;
 import static java.util.Arrays.asList;
 
 /**
  * Created by Nicolas Mine  on 04-12-17.
+ * Activity that manage the history of last seven days with colored bar
  */
 
 public class HistoryActivity extends AppCompatActivity {
 
-    private RelativeLayout mMoodBar1;
-    private RelativeLayout mMoodBar2;
-    private RelativeLayout mMoodBar3;
-    private RelativeLayout mMoodBar4;
-    private RelativeLayout mMoodBar5;
-    private RelativeLayout mMoodBar6;
-    private RelativeLayout mMoodBar7;
+    @BindView(R.id.seek_bar_day_1)
+    RelativeLayout mMoodBar1;
+    @BindView(R.id.seek_bar_day_2)
+    RelativeLayout mMoodBar2;
+    @BindView(R.id.seek_bar_day_3)
+    RelativeLayout mMoodBar3;
+    @BindView(R.id.seek_bar_day_4)
+    RelativeLayout mMoodBar4;
+    @BindView(R.id.seek_bar_day_5)
+    RelativeLayout mMoodBar5;
+    @BindView(R.id.seek_bar_day_6)
+    RelativeLayout mMoodBar6;
+    @BindView(R.id.seek_bar_day_7)
+    RelativeLayout mMoodBar7;
 
-
-    private TextView mTextView1;
-    private TextView mTextView2;
-    private TextView mTextView3;
-    private TextView mTextView4;
-    private TextView mTextView5;
-    private TextView mTextView6;
-    private TextView mTextView7;
+    @BindView(R.id.day_minus_1_text)
+    TextView mTextView1;
+    @BindView(R.id.day_minus_2_text)
+    TextView mTextView2;
+    @BindView(R.id.day_minus_3_text)
+    TextView mTextView3;
+    @BindView(R.id.day_minus_4_text)
+    TextView mTextView4;
+    @BindView(R.id.day_minus_5_text)
+    TextView mTextView5;
+    @BindView(R.id.day_minus_6_text)
+    TextView mTextView6;
+    @BindView(R.id.day_minus_7_text)
+    TextView mTextView7;
 
     private Repository mRepository;
 
@@ -52,13 +68,12 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        bind(this);
         mRepository = (Repository) getApplicationContext();
         initMoodBars();
     }
 
     private void initMoodBars() {
-        initMoodDayBars();
-        initTextView();
         drawMoodBar();
         addCommentToBar();
     }
@@ -221,27 +236,5 @@ public class HistoryActivity extends AppCompatActivity {
                 findViewById(R.id.day_minus_6_image),
                 findViewById(R.id.day_minus_7_image));
     }
-
-
-    private void initMoodDayBars() {
-        mMoodBar1 = findViewById(R.id.seek_bar_day_1);
-        mMoodBar2 = findViewById(R.id.seek_bar_day_2);
-        mMoodBar3 = findViewById(R.id.seek_bar_day_3);
-        mMoodBar4 = findViewById(R.id.seek_bar_day_4);
-        mMoodBar5 = findViewById(R.id.seek_bar_day_5);
-        mMoodBar6 = findViewById(R.id.seek_bar_day_6);
-        mMoodBar7 = findViewById(R.id.seek_bar_day_7);
-    }
-
-    private void initTextView() {
-        mTextView1 = findViewById(R.id.day_minus_1_text);
-        mTextView2 = findViewById(R.id.day_minus_2_text);
-        mTextView3 = findViewById(R.id.day_minus_3_text);
-        mTextView4 = findViewById(R.id.day_minus_4_text);
-        mTextView5 = findViewById(R.id.day_minus_5_text);
-        mTextView6 = findViewById(R.id.day_minus_6_text);
-        mTextView7 = findViewById(R.id.day_minus_7_text);
-    }
-
 
 }

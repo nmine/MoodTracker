@@ -20,7 +20,6 @@
         </activity>
         <activity android:name=".controller.history.HistoryActivity" />
         <activity android:name=".controller.history.PieChartHistoryActivity" />
-        <receiver android:name=".service.AutoSaveMoodReceiver" android:process=":remote"></receiver>
         <meta-data
             tools:replace="android:value"
             android:name="android.support.VERSION"

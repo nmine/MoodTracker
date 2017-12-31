@@ -19,41 +19,52 @@ import be.nmine.moodtracker.controller.history.PieChartHistoryActivity;
 import be.nmine.moodtracker.model.enumModel.Mood;
 import be.nmine.moodtracker.repository.Repository;
 import be.nmine.moodtracker.repository.RepositoryImpl;
+import butterknife.BindView;
 
-import static android.text.TextUtils.*;
+import static android.text.TextUtils.isEmpty;
 import static android.view.View.OnClickListener;
 import static be.nmine.moodtracker.model.enumModel.Mood.values;
+import static butterknife.ButterKnife.bind;
 
 /**
  * Created by Nicolas Mine on 29-11-17.
+ * Main Activity that manage the Mood page
  */
 
 public class MainActivity extends AppCompatActivity {
 
-
-    private FloatingActionButton mAddComment;
-    private FloatingActionButton mGotToHistoryBar;
-    private FloatingActionButton mGotToHistoryPieChart;
+    @BindView(R.id.float_button_item_add_note)
+    FloatingActionButton mAddComment;
+    @BindView(R.id.float_button_item_go_to_history_bar)
+    FloatingActionButton mGotToHistoryBar;
+    @BindView(R.id.float_button_item_go_to_history_pie_chart)
+    FloatingActionButton mGotToHistoryPieChart;
     private EditText mTextComment;
-    private ViewPager mViewPager;
+    @BindView(R.id.viewpager)
+    ViewPager mViewPager;
     private Repository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mRepository = (Repository) getApplicationContext();
         setContentView(R.layout.activity_main);
+        bind(this);
+        mRepository = (Repository) getApplicationContext();
         initFloatButtons();
         initPager();
+
     }
 
     private void initPager() {
-        mViewPager = findViewById(R.id.viewpager);
         String dailyMood = mRepository.getTodayMood();
         mViewPager.setAdapter(new MoodPagerAdapter(this, (RepositoryImpl) getApplicationContext()));
         saveHappyMoodIfNoMoodYetForToday(dailyMood);
         mViewPager.setCurrentItem(getIdTodayMood(dailyMood));
+        addPageChangeListener();
+    }
+
+    private void addPageChangeListener() {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -92,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initHistoryButtons() {
-        mGotToHistoryBar = findViewById(R.id.float_button_item_go_to_history_bar);
         mGotToHistoryBar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initHistoryPieButtons() {
-        mGotToHistoryPieChart = findViewById(R.id.float_button_item_go_to_history_pie_chart);
         mGotToHistoryPieChart.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAddNoteButton() {
-        mAddComment = findViewById(R.id.float_button_item_add_note);
         mAddComment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
