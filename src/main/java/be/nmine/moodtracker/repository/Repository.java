@@ -33,13 +33,6 @@ public interface Repository {
     void saveDailyMood(Mood mood);
 
     /**
-     * Save the @{@link Mood} for a day in the day (or today if second param is 0)
-     * @param mood the @{@link Mood} to save
-     * @param dayBefore number of day before today to sabe the @{@link Mood}
-     */
-    void saveMood(Mood mood, int dayBefore);
-
-    /**
      * Get the @{@link Mood} saved for the day today minus the param
      * @param dayBefore the number of day in the past for this mood (0 for today)
      * @return the @{@link Mood} for this day

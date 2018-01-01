@@ -2,10 +2,6 @@ package be.nmine.moodtracker.model.enumModel;
 
 import be.nmine.moodtracker.R;
 
-/**
- * Created by Nicolas Mine on 29-11-17.
- */
-
 public enum Mood {
 
     SAD(0, R.layout.view_sad,R.color.faded_red),
@@ -14,9 +10,12 @@ public enum Mood {
     HAPPY(3, R.layout.view_happy,R.color.light_sage),
     SUPER_HAPPY(4, R.layout.view_super_happy,R.color.banana_yellow);
 
-    private int mId;
-    private int mLayoutId;
-    private int mColorId;
+    /**
+     * Created by Nicolas Mine on 29-11-17.
+     */
+    private final int mId;
+    private final int mLayoutId;
+    private final int mColorId;
 
     Mood(int id, int layoutId, int colorId) {
         mId = id;

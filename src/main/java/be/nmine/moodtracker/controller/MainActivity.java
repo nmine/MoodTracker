@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initPager() {
         String dailyMood = mRepository.getTodayMood();
-        mViewPager.setAdapter(new MoodPagerAdapter(this, (RepositoryImpl) getApplicationContext()));
+        mViewPager.setAdapter(new MoodPagerAdapter(this));
         saveHappyMoodIfNoMoodYetForToday(dailyMood);
         mViewPager.setCurrentItem(getIdTodayMood(dailyMood));
         addPageChangeListener();

@@ -2,22 +2,19 @@ package be.nmine.moodtracker.model;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 import static be.nmine.moodtracker.util.Constants.*;
 
 /**
- * Created by Nicolas Mine  on 03-12-17.
+ * Created by Nicolas Mine on 03-12-17.
  */
 
 public class Comments {
 
     @Expose
-    private Map<String, String> mapCommentDay;
+    private final Map<String, String> mapCommentDay;
 
     public Comments() {
         mapCommentDay = new TreeMap<>();

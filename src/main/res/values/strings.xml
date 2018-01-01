@@ -10,10 +10,14 @@
     <string name="history_bar_minus3">Il y a 3 jours</string>
     <string name="history_bar_minus2">Il y a 2 jours</string>
     <string name="history_bar_minus1">Hier</string>
+    <string name="history_overview_day">Totale depuis : %1$d jour%2$s</string>
     <string name="history_pie_no_data_yet">Pas de données</string>
     <string name="history_pie_mood_sad">Sad</string>
     <string name="history_pie_mood_disappointed">Disappointed</string>
     <string name="history_pie_mood_normal">Normal</string>
     <string name="history_pie_mood_happy">Happy</string>
     <string name="history_pie_mood_supper_happy">Supper happy</string>
+    <string name="fab_history_pie">Historique camenbert</string>
+    <string name="fab_history_bar">Historique barre</string>
+    <string name="fab_add_note">Ajouter note</string>
 </resources>

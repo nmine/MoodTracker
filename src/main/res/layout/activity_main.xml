@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,7 +12,6 @@
         android:layout_height="match_parent" />
 
     <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/float_button_naviguation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         fab:menu_backgroundColor="@android:color/transparent"

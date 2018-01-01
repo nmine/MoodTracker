@@ -8,12 +8,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by n1mbus on 08-12-17.
+ * Created by Nicolas Mine on 08-12-17.
  */
 
 public class Constants {
 
-    public static final String DATE_PATTERN = "dd-MM-yyyy";
+    private static final String DATE_PATTERN = "dd-MM-yyyy";
 
     public static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat(DATE_PATTERN);
 

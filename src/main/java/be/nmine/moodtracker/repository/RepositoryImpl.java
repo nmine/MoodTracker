@@ -18,6 +18,10 @@ import static be.nmine.moodtracker.util.Constants.getSubtractDay;
 
 /**
  * Created by Nicolas Mine on 21-12-17.
+ * Implementation of the repository interface
+ * Use the sharedPreference to persist @{@link Moods} and @{@link Comments}
+ * those objects are wrapper for a map that contain date as key and mood and comment as value
+ * those object will be put in the sharedPreference with the right key and as value in json format (type string).
  */
 
 public class RepositoryImpl extends Application implements Repository {
@@ -79,11 +83,10 @@ public class RepositoryImpl extends Application implements Repository {
 
     @Override
     public void saveDailyMood(Mood mood) {
-        saveMood(mood,0);
+        saveMood(mood, 0);
     }
 
-    @Override
-    public void saveMood(Mood mood, int dayBefore) {
+    private void saveMood(Mood mood, int dayBefore) {
         Moods moods = getMoods();
         String date = DATE_FORMATER.format(getSubtractDay(-dayBefore));
         moods.getMoodOfDay().put(date, mood.name());
@@ -140,14 +143,5 @@ public class RepositoryImpl extends Application implements Repository {
                 .apply();
     }
 
-    @Override
-    public void saveComment(String comment, int dayBefore) {
-        Comments comments = getComments();
-        String date = DATE_FORMATER.format(getSubtractDay(-dayBefore));
-        comments.getMapCommentDay().put(date, comment);
-        mSharedPreferences.edit().putString(PREF_KEY_COMMENTS, comments.json())
-                .apply();
-
-    }
 
 }

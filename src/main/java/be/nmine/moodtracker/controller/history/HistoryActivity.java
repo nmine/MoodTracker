@@ -177,8 +177,8 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     class Pair {
-        private int margins;
-        private int color;
+        private final int margins;
+        private final int color;
 
         Pair(int margins, int color) {
             this.margins = margins;

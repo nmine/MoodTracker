@@ -17,12 +17,10 @@ import static be.nmine.moodtracker.model.enumModel.Mood.values;
 public class MoodPagerAdapter extends PagerAdapter {
 
 
-    private Context mContext;
-    private Repository mRepository;
+    private final Context mContext;
 
-    public MoodPagerAdapter(Context context, Repository repository) {
+    public MoodPagerAdapter(Context context) {
         mContext = context;
-        mRepository = repository;
     }
 
 
@@ -55,11 +53,6 @@ public class MoodPagerAdapter extends PagerAdapter {
     public CharSequence getPageTitle(int position) {
         Mood customPagerEnum = values()[position];
         return mContext.getString(customPagerEnum.getId());
-    }
-
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
     }
 
 }
