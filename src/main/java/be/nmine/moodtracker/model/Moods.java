@@ -5,6 +5,8 @@ import com.google.gson.annotations.Expose;
 import java.util.Map;
 import java.util.TreeMap;
 
+import be.nmine.moodtracker.model.enumModel.Mood;
+
 import static be.nmine.moodtracker.util.Constants.GSON;
 
 /**
@@ -28,13 +30,10 @@ public class Moods {
         return moodOfDay;
     }
 
-//    //For testing
-//    public Moods dummyMoodOfDayBefore(Mood mood, int numberOfDayBefore) {
-//        moodOfDay.put(DATE_FORMATER.format(getSubtractDay(-numberOfDayBefore)),mood.name());
-//        return this;
-//    }
-
-
+    public Moods putToMap(String date, Mood mood) {
+        moodOfDay.put(date,mood.name());
+        return this;
+    }
 
     public static Moods fromJson(String json) {
         if(json == null || json.isEmpty())

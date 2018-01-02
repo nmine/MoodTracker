@@ -18,7 +18,6 @@ import be.nmine.moodtracker.controller.history.HistoryActivity;
 import be.nmine.moodtracker.controller.history.PieChartHistoryActivity;
 import be.nmine.moodtracker.model.enumModel.Mood;
 import be.nmine.moodtracker.repository.Repository;
-import be.nmine.moodtracker.repository.RepositoryImpl;
 import butterknife.BindView;
 
 import static android.text.TextUtils.isEmpty;
